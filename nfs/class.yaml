@@ -1,0 +1,7 @@
+# From: https://github.com/kubernetes-incubator/external-storage/blob/master/nfs/deploy/kubernetes/class.yaml
+kind: StorageClass
+apiVersion: storage.k8s.io/v1beta1
+metadata:
+  name: biotensorflow-nfs
+# The provisioner value needs to match the value specified in deployment.yaml  
+provisioner: biotensorflow/nfs

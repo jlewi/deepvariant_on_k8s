@@ -1,0 +1,14 @@
+# From https://github.com/kubernetes-incubator/external-storage/blob/master/nfs/deploy/kubernetes/claim.yaml
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: nfs
+  annotations:
+    # The class should match the value specified in storage class.
+    volume.beta.kubernetes.io/storage-class: "biotensorflow-nfs"
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Mi

@@ -1,0 +1,38 @@
+# RBAC configuration for the NFS provisioner
+#
+# See https://github.com/kubernetes-incubator/external-storage/tree/master/docs#authorizing-provisioners-for-rbac-or-openshift
+# We need to grant role: system:persistent-volume-provisioner to the service account being used by the provisioner
+
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: default-provisioner
+  namespace: default
+subjects:
+- kind: ServiceAccount
+  name: default
+  namespace: default
+roleRef:
+  kind: ClusterRole
+  name: system:persistent-volume-provisioner
+  apiGroup: rbac.authorization.k8s.io
+
+
+---
+# TODO(jlewi): Making the default service account a cluster-admin is  bad.
+# This was a hack to figure out if the problem with the NFS provisioner not being able to get the Ip address of the service
+# was due to RBAC issues. We should create an appropriate RBAC role and binding for the NFS provisioner.
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: system:default:cluster-admin
+  namespace: default
+subjects:
+- kind: ServiceAccount
+  name: default
+  namespace: default
+roleRef:
+  kind: ClusterRole
+  name: cluster-admin
+  apiGroup: rbac.authorization.k8s.io
