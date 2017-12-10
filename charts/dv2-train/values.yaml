@@ -1,0 +1,14 @@
+# Default values for dv2-train.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+#
+# The Docker image containing th ecode
+cpu_image: gcr.io/deepvariant-docker/deepvariant:0.4.0
+gpu_image: gcr.io/deepvariant-docker/deepvariant_gpu:0.4.0
+# TODO(jlewi): Can we provide a default that will create a new output directory for each job?
+train_dir:
+dataset_config:
+num_ps: 2
+num_workers: 3
+
+
