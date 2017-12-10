@@ -1,0 +1,4 @@
+apiVersion: v1
+description: A Helm chart for training a DeepVariant model.
+name: dv2-train
+version: 0.1.0

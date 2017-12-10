@@ -1,0 +1,74 @@
+# YAML spec for a training job which uses GPUs
+apiVersion: tensorflow.io/v1alpha1
+kind: TfJob
+metadata:
+  name: {{ .Release.Name }}
+spec:
+  tensorBoard:
+    logDir: {{ .Values.train_dir }}
+  replicaSpecs:
+    - replicas: 1
+      tfPort: 2222
+      tfReplicaType: MASTER
+      template:
+        spec:
+          containers:
+            - image: {{ .Values.gpu_image }}
+              name: tensorflow
+              command:
+                - python
+                - -m
+                - deepvariant.model_train
+                - --dataset_config_pbtxt={{ .Values.dataset_config }}
+                - --start_from_checkpoint=
+                - --master=
+                - --train_dir={{ .Values.train_dir }}
+                - --num_retries=100
+                - --alsologtostderr
+              resources:
+                limits:
+                  alpha.kubernetes.io/nvidia-gpu: 1
+                requests:
+                  alpha.kubernetes.io/nvidia-gpu: 1
+          restartPolicy: OnFailure
+    - replicas: {{ .Values.num_workers }}
+      tfPort: 2222
+      tfReplicaType: WORKER
+      template:
+        spec:
+          containers:
+            - image: {{ .Values.gpu_image }}
+              name: tensorflow
+              command:
+                - python
+                - /opt/deepvariant/bin/model_train.zip
+                - --dataset_config_pbtxt={{ .Values.dataset_config }}
+                - --start_from_checkpoint=
+                - --master=
+                - --train_dir={{ .Values.train_dir }}
+                - --num_retries=100
+                - --alsologtostderr
+              resources:
+                limits:
+                  alpha.kubernetes.io/nvidia-gpu: 1
+                requests:
+                  alpha.kubernetes.io/nvidia-gpu: 1
+          restartPolicy: OnFailure
+    - replicas: {{ .Values.num_ps }}
+      tfPort: 2222
+      tfReplicaType: PS
+      template:
+        spec:
+          containers:
+            - image: {{ .Values.cpu_image }}
+              name: tensorflow
+              command:
+                - python
+                - /opt/deepvariant/bin/model_train.zip
+                - --dataset_config_pbtxt={{ .Values.dataset_config }}
+                - --start_from_checkpoint=
+                - --master=
+                - --train_dir={{ .Values.train_dir }}
+                - --num_retries=100
+                - --alsologtostderr
+          restartPolicy: OnFailure
