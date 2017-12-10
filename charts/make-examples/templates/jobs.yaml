@@ -15,13 +15,12 @@ spec:
       name: make-examples-{{randAlphaNum 6 | lower }}-{{ $index }}
     spec:
       containers:
-      - name: job
-        # image: gcr.io/google.com/brain-genomics/deepvariant_dogfood:latest
-        #command:
-        #  - python
-        #  - /opt/deepvariant/bin/make_examples.zip
-        # The image below is the image I built that installs biotf as a pip package into the stock TF container.
+      - name: job        
         image: gcr.io/deepvariant-docker/deepvariant:0.4.0
+        #command:
+        #   - tail
+        #   - -f
+        #   - /dev/null
         command:
           - python
           - /opt/deepvariant/bin/make_examples.zip
