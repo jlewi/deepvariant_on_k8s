@@ -1,0 +1,15 @@
+# Default values for make-examples.
+# This is a YAML-formatted file.
+#
+# The path to the reference to use
+reference: /mnt/biotensorflow/data/reference/GRCh38_Verily_v1.genome.fa
+# List the shards
+# shards should be a list of dictionaries specifying the input and output
+# file.
+shards:
+  - reads: /mnt/biotensorflow/data/FAKE_FLOWCELL/GRCh38/HG001-NA12878-pFDA/chr20/realigned.bam
+    # TODO(jlewi): Writing to GCS doesn't work either
+    #candidates: /mnt/biotensorflow/test_output/output.vsc.tfrecord
+    examples: /mnt/biotensorflow/test_output/chr20.tfrecord.20170815.gz
+
+

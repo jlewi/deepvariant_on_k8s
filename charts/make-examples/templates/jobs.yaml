@@ -1,0 +1,44 @@
+# Generate a job for each shard
+# We need to save the current scope so we can access it within the range
+# See https://github.com/kubernetes/helm/issues/1311
+{{- $root := . -}}
+{{- range $index, $shard := .Values.shards }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  # TODO(jlewi): Add a release specific label.
+  name: make-examples-{{randAlphaNum 6 | lower }}-{{ $index }}
+spec:
+  template:
+    metadata:
+      # TODO(jlewi): Should we define a variable so the salt is the same.
+      name: make-examples-{{randAlphaNum 6 | lower }}-{{ $index }}
+    spec:
+      containers:
+      - name: job
+        # image: gcr.io/google.com/brain-genomics/deepvariant_dogfood:latest
+        #command:
+        #  - python
+        #  - /opt/deepvariant/bin/make_examples.zip
+        # The image below is the image I built that installs biotf as a pip package into the stock TF container.
+        image: gcr.io/deepvariant-docker/deepvariant:0.4.0
+        command:
+          - python
+          - /opt/deepvariant/bin/make_examples.zip
+          - --mode=calling
+          - --ref={{ $root.Values.reference }}
+          - --reads={{ $shard.reads }}
+          #- --candidates={{ $shard.candidates }}
+          - --examples={{ $shard.examples }}
+          # TODO(jlewi): We should make regions a template parameter
+          - --regions=chr20
+        volumeMounts:
+          - name: home
+            mountPath: /mnt/biotensorflow
+
+      restartPolicy: OnFailure
+      volumes:
+        - name: home
+          persistentVolumeClaim:
+            claimName: nfs
+{{- end }}
