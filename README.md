@@ -84,7 +84,12 @@ Modify the config for JuptyerHub to specify the NFS volume you created e.g. some
 
 * Use the JuptyerHub UI to spawn your Jupyter instance
 * I recommend using JuptyerLab (which is in beta) as opposed to Juptyer since it gives you an IDE in addition to a Jupyter notebook
-  * After starting your Jupyter instance just replace "/tree" in the URL with "/lab"
+  * After starting your Jupyter instance just replace "/tree" in the URL with "/lab" e.g
+
+    ```
+    http://localhost:8100/user/${USER}/lab
+    ```
+
   * TODO(jeremy@lewi.us): File an issue with JupyterHub to add this to the UI.
 
 * Checkout the repository https://github.com/jlewi/deepvariant_on_k8s
