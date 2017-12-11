@@ -24,13 +24,14 @@ spec:
         command:
           - python
           - /opt/deepvariant/bin/make_examples.zip
-          - --mode=calling
+          - --mode=training
           - --ref={{ $root.Values.reference }}
           - --reads={{ $shard.reads }}
+          - --truth_variants={{ $root.Values.truth_variants }}
           #- --candidates={{ $shard.candidates }}
           - --examples={{ $shard.examples }}
-          # TODO(jlewi): We should make regions a template parameter
-          - --regions=chr20
+          - --confident_regions={{ $root.Values.confident_regions }}
+          - --regions={{ $root.Values.regions }}
         volumeMounts:
           - name: home
             mountPath: /mnt/biotensorflow
