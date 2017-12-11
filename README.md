@@ -35,7 +35,7 @@ Deploy it
 kubectl apply -f nfs/
 ```
 
-## Copying Data to NFS
+## Setup Kubeflow
 
 Checkout [Kubeflow](https://github.com/google/kubeflow)
  
@@ -69,34 +69,38 @@ Modify the config for JuptyerHub to specify the NFS volume you created e.g. some
     ]
 ```
 
-To copy data to NFS start Juptyer on the cluster using [Kubeflow](https://github.com/google/kubeflow)
 
-  * Connect to Jupyter
+## Start Juptyer on the cluster
 
-  ```
-  kubectl port-forward tf-hub-0 8100:8000
-  ```
+* Follow the [Kubeflow quickstart](https://github.com/google/kubeflow/tree/master/components/jupyterhub#quick-start) for connecting to JupyterHub and starting a notebook
+   
+   * You most likely want to follow the instructions for using kubectl port-forward to connect to the cluster.
 
-  * You can now access it localhost:8100
+  	```
+    kubectl port-forward tf-hub-0 8100:8000
+    ```
 
-* At this point we cann use kubectl exec to start a shell in the datalab container.
+  * You should now be able to access JuptyerHub at http://localhost:8100
 
-* To start a shell
+* Use the JuptyerHub UI to spawn your Jupyter instance
+* I recommend using JuptyerLab (which is in beta) as opposed to Juptyer since it gives you an IDE in addition to a Jupyter notebook
+  * After starting your Jupyter instance just replace "/tree" in the URL with "/lab"
+  * TODO(jeremy@lewi.us): File an issue with JupyterHub to add this to the UI.
 
-```
-kubectl exec -ti ${DATALAB_POD} /bin/bash
-```
+* Checkout the repository https://github.com/jlewi/deepvariant_on_k8s
+  * You can execute the git clone command a variety of ways
+     * in a notebook create and execute a cell with the following command
 
-* Checkout the git repo onto the NFS filesystem
+       ```
+       !git clone https://github.com/jlewi/deepvariant_on_k8s ~/pd/git_deepvariant_on_k8s
+       ```
+     * Use JupyterLab to start a shell and execute git clone inside it
+     * Start a shell in the pod via kubectl
 
-```
-mkdir -p /datalab/biotensorflow/home/jlewi
-```
+	 ```
+	 kubectl exec -ti ${JUPYTER_POD} /bin/bash
 
-
-```
-kubectl port-forward ${DATALAB_POD} 8888:8080
-```
+ * Use the notebook [jlewi/deepvariant_on_k8s](https://github.com/jlewi/deepvariant_on_k8s/deepvariant.ipynb) to train Deepvariant models.
 
 # Friction Log
 
