@@ -1,0 +1,4 @@
+dataset_config_pbtxt:
+eval_dir:
+train_dir:
+image: gcr.io/cloud-ml-dev/biotensorflow:c2e4f79-dirty-b364412
