@@ -1,5 +1,5 @@
 # YAML spec for a training job which uses GPUs
-apiVersion: tensorflow.io/v1alpha1
+apiVersion: tensorflow.org/v1alpha1
 kind: TfJob
 metadata:
   name: {{ .Release.Name }}
@@ -17,8 +17,7 @@ spec:
               name: tensorflow
               command:
                 - python
-                - -m
-                - deepvariant.model_train
+                - /opt/deepvariant/bin/model_train.zip
                 - --dataset_config_pbtxt={{ .Values.dataset_config }}
                 - --start_from_checkpoint=
                 - --master=
@@ -27,9 +26,7 @@ spec:
                 - --alsologtostderr
               resources:
                 limits:
-                  alpha.kubernetes.io/nvidia-gpu: 1
-                requests:
-                  alpha.kubernetes.io/nvidia-gpu: 1
+                  nvidia.com/gpu: 1
           restartPolicy: OnFailure
     - replicas: {{ .Values.num_workers }}
       tfPort: 2222
@@ -50,9 +47,7 @@ spec:
                 - --alsologtostderr
               resources:
                 limits:
-                  alpha.kubernetes.io/nvidia-gpu: 1
-                requests:
-                  alpha.kubernetes.io/nvidia-gpu: 1
+                  nvidia.com/gpu: 1
           restartPolicy: OnFailure
     - replicas: {{ .Values.num_ps }}
       tfPort: 2222
