@@ -1,0 +1,25 @@
+apiVersion: "mlkube.io/v1beta1"
+kind: "TfJob"
+metadata:
+  name: {{ .Release.Name }}
+spec:
+  tensorBoard:
+    logDir: {{ .Values.eval_dir }}
+  replicaSpecs:
+    - replicas: 1
+      tfPort: 2222
+      tfReplicaType: MASTER
+      template:
+        spec:
+          containers:
+            - image: {{ .Values.image }}
+              name: tensorflow
+              command:
+                - python
+                - /opt/deepvariant/bin/model_eval.zip
+                - --dataset_config_pbtxt={{ .Values.dataset_config_pbtxt }}
+                - --master=
+                - --checkpoint_dir={{ .Values.train_dir }}
+                - --eval_dir={{ .Values.eval_dir }}
+                - --alsologtostderr
+          restartPolicy: OnFailure

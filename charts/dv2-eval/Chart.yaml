@@ -1,0 +1,4 @@
+apiVersion: v1
+description: A chart for running DeepVariant evaluation
+name: dv2-eval
+version: 0.1.0
