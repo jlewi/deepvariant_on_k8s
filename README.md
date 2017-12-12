@@ -1,8 +1,10 @@
 # deepvariant_on_k8s
+
 Repository for running [Deepvariant](https://github.com/google/deepvariant) on K8s
   * This is a work in progress.
   * Initial focus on training.
 
+[Deepvariant docs](https://github.com/google/deepvariant/blob/master/docs/deepvariant-model-training.md) for training.  
 
 ## Cluster setup.
 
