@@ -107,7 +107,7 @@ Modify the config for JuptyerHub to specify the NFS volume you created e.g. some
 	 ```
 	 kubectl exec -ti ${JUPYTER_POD} /bin/bash
 
- * Use the notebook [jlewi/deepvariant_on_k8s](https://github.com/jlewi/deepvariant_on_k8s/deepvariant.ipynb) to train Deepvariant models.
+ * Use the notebook [jlewi/deepvariant_on_k8s](https://github.com/jlewi/deepvariant_on_k8s/blob/master/deepvariant.ipynb) to train Deepvariant models.
 
 # Friction Log
 
